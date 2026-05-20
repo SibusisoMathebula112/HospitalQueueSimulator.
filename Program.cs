@@ -96,7 +96,7 @@
         static void SimulationTime()
         {
             waitingTime = timeSpentWithPatient * numberOfPatientsInTheQueue;
-
+            
 
         }
 
@@ -142,12 +142,18 @@
                
 
                 Console.WriteLine();
-            }
 
-            Console.WriteLine("Thank you {0} for coming,get well soon!",patientName);
-            Console.WriteLine();
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+           
+            }
+                ExitOfProgram();
+            }
+           static void ExitOfProgram()
+
+            {
+                Console.WriteLine("Thank you {0} for coming,get well soon!", patientName);
+                Console.WriteLine();
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
         }
     }
 }
