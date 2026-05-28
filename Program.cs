@@ -13,14 +13,13 @@
 
         //Global variables:
         static string patientName;
-        static int simulationTime, arrivalTime, treatmentTime;
+        static int simulationTime, arrivalTime, treatmentTime, patientAge;
         static int menuNr;
         static bool isPatientFinished = false;
         static string[] patientQueue = new string[10];
         static int patientCount = 0;
 
         static int waitingTime = 0;
-        static int numberOfPatientsInTheQueue = 3;
 
         static void StartingScreen()
         {
@@ -36,10 +35,20 @@
             Console.Write("Please enter your Name: ");
             return Console.ReadLine();
 
+           
         }
         static int GetPatientAge()
         {
-            return GetPatientAge();/////////;
+            int age;
+            Console.Write("Please enter your age: ");
+
+
+            while (!int.TryParse(Console.ReadLine(), out age))
+            {
+                Console.WriteLine("Invalid input. Enter a valid age: ");
+            }
+            return age;
+                
         }
         static void Menu()
         {
@@ -107,7 +116,7 @@
 
         static void SimulationTime()
         {
-            waitingTime = timeSpentWithPatient * numberOfPatientsInTheQueue;
+            waitingTime = timeSpentWithPatient * patientCount;
 
 
         }
@@ -122,8 +131,8 @@
             Console.WriteLine("The doctor arrives at 06:45");
             Console.WriteLine("Current Time: ");
             //Console.WriteLine("Doctor Status: {0}",isDoctorAvailable);
-            Console.WriteLine("Patients Wating: {0}", numberOfPatientsInTheQueue);
-            Console.WriteLine("Estimated Waiting Time: {0}", timeSpentWithPatient * numberOfPatientsInTheQueue);
+            Console.WriteLine("Patients Wating: {0}", patientCount);
+            Console.WriteLine("Estimated Waiting Time: {0}", timeSpentWithPatient * patientCount);
             Console.WriteLine(">>>>>>>>>>>>>><<<<<<<<<<<<<");
             Console.WriteLine();
             Console.WriteLine("press any key to see the Menu...");
@@ -156,11 +165,14 @@
                 Console.WriteLine((i + 1) + "." + patientQueue[i]);
             }
 
-            static void Main()
+            }
+        static void Main()
             {
                 StartingScreen();
 
                 patientName = GetPatientName();
+                patientAge = GetPatientAge();
+                
                 AddPatientToQueue(patientName);
 
                 Console.WriteLine("Welcome," + patientName + "!");
@@ -197,4 +209,4 @@
             }
         }
     }
-}
+
