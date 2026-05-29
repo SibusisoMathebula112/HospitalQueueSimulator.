@@ -75,7 +75,7 @@
         static void DisplayQueue()
         {
             Console.WriteLine();
-            Console.WriteLine("==================================");
+            Console.WriteLine("==================================");   
             Console.WriteLine("          Patient Queue           ");
             Console.WriteLine();
 
