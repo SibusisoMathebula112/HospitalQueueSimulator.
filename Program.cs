@@ -257,7 +257,7 @@
                 Console.WriteLine();
 
                
-              
+               
             while (isSimulationRunning())
             {
                 DisplaySimulationTime();
