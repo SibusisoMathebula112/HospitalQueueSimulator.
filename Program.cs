@@ -2,24 +2,22 @@
 {
     internal class Program
     {
-        
+        //CONSTANTS:
         const int timeSpentWithPatient = 15;
         const string nameOfDoctor = "MATHEBULA";
-
-
-
-        //const int MAXIMUM_MINUTES_PER_DAY = ;
-
-
+        
         //Global variables:
-        static string patientName;
+        
         static int simulationTime, arrivalTime, treatmentTime, patientAge;
-        static int menuNr;
+        static int menuNr, childAge;
+        static string childPatient, adultPatient, patientName;
         static bool isPatientFinished = false;
         static string[] patientQueue = new string[10];
         static int patientCount = 0;
+        static int currentMinutes = 15;
+        static int currentHour = 07;
 
-        static int waitingTime = 0;
+        static int waitingTime = 15;
 
         static void StartingScreen()
         {
@@ -41,15 +39,64 @@
         {
             int age;
             Console.Write("Please enter your age: ");
+            Console.WriteLine();
 
 
             while (!int.TryParse(Console.ReadLine(), out age))
             {
                 Console.WriteLine("Invalid input. Enter a valid age: ");
+                Console.WriteLine();
             }
             return age;
                 
         }
+        static void DisplaySimulationTime()
+        {
+            Console.Clear();
+            Console.WriteLine(">>>>>>>>>>>>>><<<<<<<<<<<<<");
+            Console.WriteLine("Display Simulation Time    ");
+            Console.WriteLine();
+            Console.WriteLine("The doctor arrives at: 07:00 ");
+            Console.WriteLine("Current Time: {0}h{1}am ", currentHour, currentMinutes);
+            Console.WriteLine("Patients Waiting: {0}", patientCount);
+            Console.WriteLine("Estimated Waiting Time: {0} minutes", timeSpentWithPatient * patientCount);
+            Console.WriteLine(">>>>>>>>>>>>>><<<<<<<<<<<<<");
+            Console.WriteLine();
+            
+
+            DisplayQueue();
+
+            Console.WriteLine("press any key to see the Menu...");
+            Console.ReadKey();
+
+
+
+        }
+        static void DisplayQueue()
+        {
+            Console.WriteLine();
+            Console.WriteLine("==================================");
+            Console.WriteLine("          Patient Queue           ");
+            Console.WriteLine();
+
+            if (patientCount == 0)
+            {
+                Console.WriteLine("No patients in the queue");
+            }
+            else
+            {
+                for (int i = 0; i < patientCount; i++)
+                {
+                    Console.WriteLine((i + 1) + "." + patientQueue[i]);
+                }
+             Console.WriteLine("==================================");
+            }
+        }
+
+
+
+
+
         static void Menu()
         {
             Console.Clear();
@@ -87,9 +134,25 @@
                 Console.WriteLine("         Children's Doctor         ");
                 Console.WriteLine();
                 Console.WriteLine("Please enter your child's name     ");
-                string nameOfPatient = Console.ReadLine();
-                Console.WriteLine("Dr {0} is available                ", nameOfDoctor);
+                childPatient = Console.ReadLine();
+                Console.WriteLine("Please enter your child's age      ");
+               
+                while (!int.TryParse(Console.ReadLine(), out childAge) || childAge < 1 || childAge > 12)
+                {
+                    Console.WriteLine(childPatient + " Please enter age from 0 to 12");
+                   
+                }
+                AddPatientToQueue(childPatient);
+                Console.WriteLine("");
+                Console.WriteLine("Dr {0} is treating {1}                ", nameOfDoctor, childPatient);
                 Console.WriteLine();
+                Console.WriteLine("The doctor is almost done");
+                Console.WriteLine();
+                Console.WriteLine("The next patient can enter the queue");
+                Console.WriteLine("===================================");
+                Console.WriteLine();
+
+
             }
             else if (menuNr == 2)
             {
@@ -97,18 +160,35 @@
                 Console.WriteLine("===================================");
                 Console.WriteLine("         Adult's Doctor            ");
                 Console.WriteLine();
+                Console.WriteLine("Please enter your name");
+                adultPatient = Console.ReadLine();
+                AddPatientToQueue(adultPatient);
+                Console.WriteLine("");
+                Console.WriteLine("Dr {0} is treating {1}                ", nameOfDoctor, patientName);
+                Console.WriteLine();
+                Console.WriteLine("The doctor is almost done");
+                Console.WriteLine();
+                Console.WriteLine("The next patient can enter the queue");
+                Console.WriteLine("===================================");
+                Console.WriteLine();
+
+
+
 
             }
             else
             {
                 Console.Clear();
-                Console.WriteLine("You chose to exit the Hospital    ");
+                Console.WriteLine("You are leaving the Hospital    ");
                 isPatientFinished = true;
 
 
 
             }
         }
+
+
+
         static bool isSimulationRunning()
         {
             return !isPatientFinished;
@@ -116,33 +196,24 @@
 
         static void SimulationTime()
         {
-            waitingTime = timeSpentWithPatient * patientCount;
+            currentMinutes += timeSpentWithPatient;
+
+            if (currentMinutes >= 60)
+            {
+                currentHour++;
+                currentMinutes = 0;
+            }
+
+           
+
+
+
 
 
         }
 
 
-        static void DisplaySimulationTime()
-        {
-            //Console.Clear();
-            Console.WriteLine(">>>>>>>>>>>>>><<<<<<<<<<<<<");
-            Console.WriteLine("Display Simulation Time    ");
-            Console.WriteLine();
-            Console.WriteLine("The doctor arrives at 06:45");
-            Console.WriteLine("Current Time: ");
-            //Console.WriteLine("Doctor Status: {0}",isDoctorAvailable);
-            Console.WriteLine("Patients Wating: {0}", patientCount);
-            Console.WriteLine("Estimated Waiting Time: {0}", timeSpentWithPatient * patientCount);
-            Console.WriteLine(">>>>>>>>>>>>>><<<<<<<<<<<<<");
-            Console.WriteLine();
-            Console.WriteLine("press any key to see the Menu...");
-            Console.ReadKey();
-
-            DisplayQueue();
-
-
-
-        }
+       
         static void AddPatientToQueue(string patientName)
         {
             if (patientCount < patientQueue.Length)
@@ -150,56 +221,75 @@
                 patientQueue[patientCount] = patientName;
                 patientCount++;
                 Console.WriteLine(patientName + " added to the queue.");
+                Console.WriteLine();
+
+
             }
             else
             {
                 Console.WriteLine("The queue is full!");
             }
         }
-        static void DisplayQueue()
+       
+        static void RemovePatientFromQueue()
         {
-            Console.WriteLine();
-            Console.WriteLine("Current Patient Queue: ");
-            for (int i = 0; i < patientCount; i++)
+            if (patientCount > 0)
             {
-                Console.WriteLine((i + 1) + "." + patientQueue[i]);
-            }
+                Console.WriteLine(patientQueue[0] + " has been treated.");
+
+                for (int i = 0; i < patientCount - 1; i++)
+                {
+                    patientQueue[i] = patientQueue[i + 1];
+                }
+                patientCount--;
+
+
 
             }
+        }
         static void Main()
             {
                 StartingScreen();
 
                 patientName = GetPatientName();
                 patientAge = GetPatientAge();
-                
-                AddPatientToQueue(patientName);
-
                 Console.WriteLine("Welcome," + patientName + "!");
                 Console.WriteLine();
 
+               
+              
+            while (isSimulationRunning())
+            {
                 DisplaySimulationTime();
                 Menu();
 
-                while (isSimulationRunning())
-                {
+                int menuNr = ShowMenuNr(3);
 
+                ProcessMenuNr(menuNr);
 
-                    int menuNr = ShowMenuNr(3);
-
-                    ProcessMenuNr(menuNr);
-
-                    SimulationTime();
+                SimulationTime();
 
 
 
-                    Console.WriteLine();
+                Console.WriteLine();
+
+
+
+
+
+
+
+
+
+
+                
+          
 
 
                 }
-                ExitOfProgram();
+                ExitProgram();
             }
-            static void ExitOfProgram()
+            static void ExitProgram()
 
             {
                 Console.WriteLine("Thank you {0} for coming,get well soon!", patientName);
